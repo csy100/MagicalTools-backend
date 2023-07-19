@@ -2,13 +2,10 @@ package com.mt.controller;
 
 import com.mt.common.Result;
 import com.mt.dto.LoginFormDto;
-import com.mt.entity.ChatTest;
 import com.mt.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Author: csy100

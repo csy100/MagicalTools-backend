@@ -6,7 +6,7 @@ spring:
   # 数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/magical_tools?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&useUnicode=true
+    url: jdbc:mysql://127.0.0.1:3306/magical_tools?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&allowPublicKeyRetrieval=true
     username: root
     password: 123456
   # Redis配置
@@ -19,8 +19,3 @@ spring:
           max-idle: 10
           min-idle: 1
           time-between-eviction-runs: 10s
-#chatgpt:
-#  token: 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
-#  proxy-host: 127.0.0.1
-#  proxy-port: 7890
-#  session-expiration-time: 30

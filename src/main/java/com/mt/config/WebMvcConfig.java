@@ -1,6 +1,7 @@
 package com.mt.config;
 
 import com.mt.utils.LoginInterceptor;
+import com.mt.utils.RefreshTokenInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,21 +20,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private StringRedisTemplate stringRedisTemplate;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor(stringRedisTemplate))
+        registry.addInterceptor(new LoginInterceptor())
                 .excludePathPatterns(
-                        "/user/**"
-                );
+                        "/user/code",
+                        "/user/login",
+                        "/user/info"
+                ).order(1);
+        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns("/**").order(0);
     }
     
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowedMethods(new String[]{"GET", "POST", "PUT", "DELETE"})
-                .allowCredentials(true)
-                .maxAge(3600)
-                .exposedHeaders("*");
+                .exposedHeaders("authorization")
+                .maxAge(3600);
     }
     
     

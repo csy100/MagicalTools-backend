@@ -2,10 +2,13 @@ package com.mt.controller;
 
 import com.mt.common.Result;
 import com.mt.dto.LoginFormDto;
+import com.mt.dto.UserDto;
 import com.mt.service.UserService;
+import com.mt.utils.UserHolder;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * Author: csy100
@@ -21,6 +24,7 @@ public class UserController {
     
     /**
      * 发送验证码
+     *
      * @param loginFormDto
      * @return
      */
@@ -31,6 +35,7 @@ public class UserController {
     
     /**
      * 登录功能
+     *
      * @param loginFormDto
      * @return
      */
@@ -39,4 +44,10 @@ public class UserController {
         return userService.userLogin(loginFormDto);
     }
     
+    
+    @GetMapping("/info")
+    public Result userInfo() {
+        UserDto userDto = UserHolder.getUser();
+        return Result.ok(userDto);
+    }
 }

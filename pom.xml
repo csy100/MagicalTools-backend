@@ -31,13 +31,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- chatgpt -->
-<!--        <dependency>-->
-<!--            <groupId>com.unfbx</groupId>-->
-<!--            <artifactId>chatgpt-java</artifactId>-->
-<!--            <version>${chatgpt}</version>-->
-<!--        </dependency>-->
-
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

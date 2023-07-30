@@ -21,7 +21,7 @@
         <hutool-all>5.8.11</hutool-all>
         <mail>1.6.2</mail>
         <mybatis-spring-boot-starter>3.0.2</mybatis-spring-boot-starter>
-        <chatgpt>1.0.14-beta1</chatgpt>
+        <chatgpt>4.1.2</chatgpt>
     </properties>
 
 
@@ -31,6 +31,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- chat-sdk -->
+        <dependency>
+            <groupId>com.github.plexpt</groupId>
+            <artifactId>chatgpt</artifactId>
+            <version>${chatgpt}</version>
+        </dependency>
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

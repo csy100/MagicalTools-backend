@@ -12,6 +12,7 @@ import com.mt.dto.UserDto;
 import com.mt.entity.User;
 import com.mt.mapper.UserMapper;
 import com.mt.service.UserService;
+import com.mt.utils.UserHolder;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -88,6 +89,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.DAYS);
         
         return Result.ok(token);
+    }
+    
+    /**
+     * 退出功能
+     * @param token
+     * @return
+     */
+    @Override
+    public Result userLogout(String token) {
+        if (StrUtil.isBlank(token)) {
+            return Result.fail("登录信息已过期！");
+        }
+        stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.ok("已安全退出！");
     }
     
     private User createUserWithEmail(LoginFormDto loginFormDto) {

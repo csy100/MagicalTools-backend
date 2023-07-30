@@ -9,7 +9,6 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-
 /**
  * Author: csy100
  * Date: 2023/7/15
@@ -45,9 +44,25 @@ public class UserController {
     }
     
     
+    /**
+     * 用户退出
+     * @param token
+     * @return
+     */
+    @PostMapping("/logout")
+    public Result userLogout(@RequestParam("token") String token) {
+        return userService.userLogout(token);
+    }
+    
+    /**
+     * 查询用户信息
+     * @return
+     */
     @GetMapping("/info")
     public Result userInfo() {
         UserDto userDto = UserHolder.getUser();
         return Result.ok(userDto);
     }
+    
+    
 }

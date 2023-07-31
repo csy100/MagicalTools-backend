@@ -12,4 +12,9 @@ public interface SessionService extends IService<Session> {
     Result addNewSession(Session session);
     
     Result sessionInit();
+    
+    Result deleteSession(String sessionId);
+    
+    Result deleteAllSessions();
+    
 }

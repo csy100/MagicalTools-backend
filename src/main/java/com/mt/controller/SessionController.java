@@ -72,13 +72,7 @@ public class SessionController {
      */
     @DeleteMapping("/deleteSession/{sessionId}")
     public Result deleteSession(@PathVariable("sessionId") String sessionId) {
-        Session querySession = sessionService.query().eq("session_id", sessionId).one();
-        if (querySession == null) {
-            return Result.fail("该会话不存在");
-        }
-        
-        sessionService.removeById(querySession);
-        return Result.ok("会话删除成功");
+        return sessionService.deleteSession(sessionId);
     }
     
     /**
@@ -88,13 +82,7 @@ public class SessionController {
      */
     @DeleteMapping("/deleteAllSession")
     public Result deleteAllSessions() {
-        Long userId = UserHolder.getUser().getId();
-        QueryChainWrapper<Session> sessionQueryChainWrapper = sessionService.query().eq("user_id", userId);
-        List<Session> sessionList = sessionQueryChainWrapper.list();
-        for (Session session : sessionList) {
-            sessionService.removeById(session);
-        }
-        return Result.ok("会话删除成功");
+        return sessionService.deleteAllSessions();
     }
     
     

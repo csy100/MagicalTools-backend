@@ -34,6 +34,8 @@ public class ChatController {
         return chatService.sendMessage(chat);
     }
     
+    
+    
 //    /**
 //     * 测试
 //     * @param prompt

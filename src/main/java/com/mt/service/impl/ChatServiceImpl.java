@@ -107,6 +107,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         SseEmitter sseEmitter = new SseEmitter(-1L);
         
         SseStreamListener listener = new SseStreamListener(sseEmitter);
+        
         Message message = Message.of(chat.getChatContent());
         
         Long userId = UserHolder.getUser().getId();

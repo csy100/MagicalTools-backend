@@ -1,5 +1,9 @@
 package com.mt.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mt.common.Result;
@@ -9,22 +13,23 @@ import com.mt.mapper.ChatMapper;
 import com.mt.service.ChatService;
 import com.mt.service.SessionService;
 import com.mt.utils.UserHolder;
-import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.ChatGPTStream;
-import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.Message;
-import com.plexpt.chatgpt.listener.ConsoleStreamListener;
 import com.plexpt.chatgpt.listener.SseStreamListener;
 import com.plexpt.chatgpt.util.Proxys;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.net.Proxy;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static com.mt.utils.RedisConstants.CHAT_USER_KEY;
+import static com.mt.utils.RedisConstants.CHAT_USER_TTL;
 
 /**
  * Author: csy100
@@ -37,8 +42,12 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
     @Resource
     private SessionService sessionService;
     
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    
     /**
      * 初始化会话数据
+     *
      * @param sessionId
      * @return
      */
@@ -55,6 +64,11 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         session.setUpdateTime(LocalDateTime.now());
         sessionService.updateById(session);
         
+//        String chatJson = stringRedisTemplate.opsForValue().get(CHAT_USER_KEY + userId + sessionId);
+//        if (StrUtil.isNotBlank(chatJson)) {
+//            List<Chat> list = JSONUtil.toList(chatJson, Chat.class);
+//            return Result.ok(list);
+//        }
         
         QueryChainWrapper<Chat> queryChainWrapper = this.query()
                 .eq("user_id", userId)
@@ -64,12 +78,16 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         
         List<Chat> list = queryChainWrapper.list();
         
+//        stringRedisTemplate.opsForValue().set(CHAT_USER_KEY + userId + sessionId,
+//                JSONUtil.toJsonStr(list), CHAT_USER_TTL, TimeUnit.DAYS);
+        
         return Result.ok(list);
     }
     
     
     /**
      * 发送消息
+     *
      * @param chat
      * @return
      */

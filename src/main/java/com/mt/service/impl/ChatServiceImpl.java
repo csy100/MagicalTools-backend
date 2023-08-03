@@ -80,7 +80,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         
         ChatGPTStream chatGPTStream = ChatGPTStream.builder()
                 .timeout(600)
-                .apiKey("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")
+                .apiKey("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")
                 .proxy(proxy)
                 .apiHost("https://api.openai.com/")
                 .build()

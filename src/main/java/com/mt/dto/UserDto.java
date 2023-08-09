@@ -2,6 +2,8 @@ package com.mt.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * Author: csy100
  * Date: 2023/7/16
@@ -12,4 +14,5 @@ public class UserDto {
     private String email;
     private String nickName;
     private String icon;
+    private LocalDateTime createTime;
 }

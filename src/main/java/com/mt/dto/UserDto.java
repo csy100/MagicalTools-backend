@@ -12,5 +12,4 @@ public class UserDto {
     private String email;
     private String nickName;
     private String icon;
-    
 }

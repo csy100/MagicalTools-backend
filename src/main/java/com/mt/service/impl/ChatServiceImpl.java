@@ -113,7 +113,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         SseStreamListener listener = new SseStreamListener(sseEmitter);
 
         // 添加预设
-        Message system = Message.ofSystem(chatRequest.getRolePlay());
+        Message system = Message.ofSystem(setting.getRolePlay());
         // 添加系统消息
         List<Message> AllMessage = new ArrayList<>();
         AllMessage.add(system);

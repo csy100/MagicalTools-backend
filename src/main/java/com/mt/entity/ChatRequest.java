@@ -19,11 +19,10 @@ public class ChatRequest {
     // 聊天设置
     private Setting setting;
 
-    // 系统扮演角色，即预设
-    private String rolePlay;
-
     @Data
     public static class Setting {
+        // 系统扮演角色，即预设
+        private String rolePlay;
 
         /**
          * 模型名称
@@ -43,29 +42,9 @@ public class ChatRequest {
         private int n;
 
         /**
-         * 结束词
-         */
-        private String stop;
-
-        /**
-         * 结尾加的内容
-         */
-        private String suffix;
-
-        /**
-         * 回显词
-         */
-        private Boolean echo;
-
-        /**
          * 最大使用token数
          */
         private int maxTokens;
-
-        /**
-         * 是否流式
-         */
-        private Boolean stream;
 
         /**
          * 介于 -2.0 和 2.0 之间的数字。

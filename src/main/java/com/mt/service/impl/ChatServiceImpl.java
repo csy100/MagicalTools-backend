@@ -118,16 +118,17 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         List<Message> AllMessage = new ArrayList<>();
         AllMessage.add(system);
         getComments(AllMessage, setting.getN() * 2, chat.getSessionId());
-
+        // 添加用户发送的消息
+        AllMessage.add(new Message("user", chat.getChatContent()));
+        ChatCompletion chatCompletion;
         Long userId = UserHolder.getUser().getId();
         listener.setOnComplate(msg -> {
             // 保存记录
             saveChat(userId, chat, msg);
         });
-        ChatCompletion chatCompletion;
         chatCompletion = ChatCompletion.builder()
                 .messages(AllMessage)
-                .model(setting.getModel())
+                .model("gpt-3.5-turbo")
                 .temperature(setting.getTemperature()) // 对话温度 使用什么取样温度，0到2之间。越高越奔放。越低越保守
                 .frequencyPenalty(setting.getFrequencyPenalty()) // 控制字符的重复度
                 .presencePenalty(setting.getPresencePenalty()) // 控制主题的重复度
@@ -146,17 +147,17 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
 
         int t = allComments.size();
         if (t <= n) {
-            for (Chat allComment : allComments) {
-                Message tempUserMessage = Message.of(allComment.getChatContent());
-                Message tempGptMessage = Message.ofAssistant(allComment.getChatContent());
+            for (int i = 0; i < t; i += 2) {
+                Message tempUserMessage = Message.of(allComments.get(i).getChatContent());
+                Message tempGptMessage = Message.ofAssistant(allComments.get(i + 1).getChatContent());
                 allMessage.add(tempUserMessage);
                 allMessage.add(tempGptMessage);
             }
             return ;
         }
-        for (int i = t - n; i <= t - 1; i++) {
+        for (int i = t - n; i <= t - 1; i += 2) {
             Message tempUserMessage = Message.of(allComments.get(i).getChatContent());
-            Message tempGptMessage = Message.ofAssistant(allComments.get(i).getChatContent());
+            Message tempGptMessage = Message.ofAssistant(allComments.get(i + 1).getChatContent());
             allMessage.add(tempUserMessage);
             allMessage.add(tempGptMessage);
         }

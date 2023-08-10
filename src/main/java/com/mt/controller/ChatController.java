@@ -2,6 +2,7 @@ package com.mt.controller;
 
 import com.mt.common.Result;
 import com.mt.entity.Chat;
+import com.mt.entity.ChatRequest;
 import com.mt.service.ChatService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,8 @@ public class ChatController {
      * @return
      */
     @PostMapping("/prompt")
-    public SseEmitter sendMessage(@RequestBody Chat chat) {
-        return chatService.sendMessage(chat);
+    public SseEmitter sendMessage(@RequestBody ChatRequest chatRequest) {
+        return chatService.sendMessage(chatRequest);
     }
     
 }

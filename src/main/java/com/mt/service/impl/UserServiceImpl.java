@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mt.common.Result;
 import com.mt.dto.LoginFormDto;
@@ -50,10 +51,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         
         String code = RandomUtil.randomNumbers(6);
+        MailUtil.send(loginFormDto.getEmail(), "验证码", "您的验证码为:<h2> " + code + "</h2>", true);
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + loginFormDto.getEmail(), code,
                 LOGIN_CODE_TTL, TimeUnit.MINUTES);
         
-        return Result.ok(code);
+        return Result.ok();
     }
     
     /**

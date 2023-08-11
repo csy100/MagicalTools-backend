@@ -89,6 +89,7 @@ public class GPTEventSourceListener extends EventSourceListener {
 //            log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
 //            errorMsg = String.valueOf(response);
 //        }
+        
         sseEmitter.send("\n\n\n ### [接收消息处理异常，响应中断，本次回答不扣费]");
         eventSource.cancel();
         SseHelper.complete(sseEmitter);

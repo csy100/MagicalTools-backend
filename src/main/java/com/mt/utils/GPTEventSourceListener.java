@@ -79,16 +79,16 @@ public class GPTEventSourceListener extends EventSourceListener {
         if (Objects.isNull(response)) {
             return;
         }
-        ResponseBody body = response.body();
-        String errorMsg = "-1";
-        if (Objects.nonNull(body)) {
-            String content = body.string();
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", content, t);
-            errorMsg = content;
-        } else {
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
-            errorMsg = String.valueOf(response);
-        }
+//        ResponseBody body = response.body();
+//        String errorMsg = "-1";
+//        if (Objects.nonNull(body)) {
+//            String content = body.string();
+//            log.error("OpenAI  sse连接异常data：{}，异常：{}", content, t);
+//            errorMsg = content;
+//        } else {
+//            log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
+//            errorMsg = String.valueOf(response);
+//        }
         sseEmitter.send("\n\n\n ### [接收消息处理异常，响应中断，本次回答不扣费]");
         eventSource.cancel();
         SseHelper.complete(sseEmitter);

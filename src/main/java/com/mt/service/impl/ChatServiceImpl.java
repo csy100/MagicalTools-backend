@@ -15,6 +15,7 @@ import com.mt.entity.Session;
 import com.mt.mapper.ChatMapper;
 import com.mt.service.ChatService;
 import com.mt.service.SessionService;
+import com.mt.utils.GPTEventSourceListener;
 import com.mt.utils.UserHolder;
 import com.plexpt.chatgpt.ChatGPTStream;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
@@ -110,8 +111,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         
         SseEmitter sseEmitter = new SseEmitter(-1L);
         
-        SseStreamListener listener = new SseStreamListener(sseEmitter);
-
+        GPTEventSourceListener listener = new GPTEventSourceListener(sseEmitter);
         // 添加预设
         Message system = Message.ofSystem(setting.getRolePlay());
         // 添加系统消息

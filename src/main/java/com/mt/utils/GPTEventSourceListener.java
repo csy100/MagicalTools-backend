@@ -50,7 +50,7 @@ public class GPTEventSourceListener extends EventSourceListener {
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         if (data.equals("[DONE]")) {
-            sseEmitter.send("[DONE]");
+//            sseEmitter.send("[DONE]");
             onComplate.accept(last);
             SseHelper.complete(sseEmitter);
             return;
@@ -62,8 +62,7 @@ public class GPTEventSourceListener extends EventSourceListener {
         String text = delta.getContent();
         if (text != null) {
             last += text;
-
-            sseEmitter.send(delta);
+            sseEmitter.send(text);
         }
     }
 
@@ -90,7 +89,7 @@ public class GPTEventSourceListener extends EventSourceListener {
             log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
             errorMsg = String.valueOf(response);
         }
-        sseEmitter.send("[DONE]");
+        sseEmitter.send("\n\n\n ### [接收消息处理异常，响应中断，本次回答不扣费]");
         eventSource.cancel();
         SseHelper.complete(sseEmitter);
     }

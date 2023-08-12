@@ -31,6 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/user/code",
                         "/user/login",
                         "/user/password"
+                        
                 );
         
     }

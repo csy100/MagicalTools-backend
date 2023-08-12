@@ -29,7 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor(stringRedisTemplate))
                 .excludePathPatterns(
                         "/user/code",
-                        "/user/login"
+                        "/user/login",
+                        "/user/password"
                 );
         
     }

@@ -1,8 +1,13 @@
 package com.mt.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.mail.MailUtil;
 import com.mt.common.Result;
 import com.mt.dto.LoginFormDto;
 import com.mt.dto.UserDto;
+import com.mt.entity.User;
 import com.mt.service.UserService;
 import com.mt.utils.UserHolder;
 import jakarta.annotation.Resource;
@@ -45,7 +50,18 @@ public class UserController {
     
     
     /**
+     * 找回密码
+     *
+     * @return
+     */
+    @PostMapping("/password")
+    public Result forgotPassword(@RequestBody LoginFormDto loginFormDto) {
+        return userService.changePassword(loginFormDto);
+    }
+    
+    /**
      * 用户退出
+     *
      * @param token
      * @return
      */
@@ -56,6 +72,7 @@ public class UserController {
     
     /**
      * 查询用户信息
+     *
      * @return
      */
     @GetMapping("/info")
@@ -63,6 +80,5 @@ public class UserController {
         UserDto userDto = UserHolder.getUser();
         return Result.ok(userDto);
     }
-    
     
 }

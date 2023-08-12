@@ -1,6 +1,7 @@
 package com.mt;
 
 import cn.hutool.extra.mail.MailUtil;
+import org.springframework.util.DigestUtils;
 
 /**
  * Author: csy100
@@ -8,7 +9,12 @@ import cn.hutool.extra.mail.MailUtil;
  */
 public class TestDemo {
     public static void main(String[] args) {
-        EmailTxt();
+//        EmailTxt();
+        if ("123".equals("1234")) {
+            System.out.println("234");
+        }
+        
+        System.out.println(DigestUtils.md5DigestAsHex("123456789".getBytes()));
     }
     
     private static void EmailTxt() {

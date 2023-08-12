@@ -77,6 +77,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user = createUserWithEmail(loginFormDto);
         }
         
+        String loginPassword = DigestUtils.md5DigestAsHex(loginFormDto.getPassword().getBytes());
+        if (!user.getPassword().equals(loginPassword)) {
+            return Result.fail("密码错误");
+        }
         // 生成token
         String token = UUID.randomUUID().toString(true);
         
@@ -106,6 +110,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         stringRedisTemplate.delete(LOGIN_USER_KEY + token);
         return Result.ok("已安全退出！");
+    }
+    
+    /**
+     * 找回密码
+     * @param loginFormDto
+     * @return
+     */
+    @Override
+    public Result changePassword(LoginFormDto loginFormDto) {
+        User user = this.query().eq("email", loginFormDto.getEmail()).one();
+        if (StrUtil.isBlank(loginFormDto.getEmail())) {
+            return Result.fail("请先填写邮箱和输入新的密码");
+        }
+        if (user == null) {
+            return Result.fail("您未注册该账号，请先进行登录注册");
+        }
+        
+        String code = RandomUtil.randomNumbers(6);
+        String content = "您的新密码为:<h2> " + loginFormDto.getPassword() + "</h2>" +
+                "您的验证码为:<h2> " + code + "</h2>(60秒内有效)";
+        MailUtil.send(loginFormDto.getEmail(), "重置密码", content, true);
+        
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + loginFormDto.getEmail(), code,
+                LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        
+        String newPassword = DigestUtils.md5DigestAsHex(loginFormDto.getPassword().getBytes());
+        user.setPassword(newPassword);
+        this.updateById(user);
+        return Result.ok("请注意查收邮箱");
     }
     
     private User createUserWithEmail(LoginFormDto loginFormDto) {

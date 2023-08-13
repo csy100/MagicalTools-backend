@@ -112,6 +112,10 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         SseEmitter sseEmitter = new SseEmitter(-1L);
         
         GPTEventSourceListener listener = new GPTEventSourceListener(sseEmitter);
+        if (setting == null) {
+            setting = new ChatRequest.Setting("", "gpt-3.5-turbo",
+                            0.0, 0, 1024, 0.0,0.0 );
+        }
         // 添加预设
         Message system = Message.ofSystem(setting.getRolePlay());
         // 添加系统消息

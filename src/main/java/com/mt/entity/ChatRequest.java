@@ -1,6 +1,7 @@
 package com.mt.entity;
 
 import cn.hutool.setting.Setting;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -20,6 +21,7 @@ public class ChatRequest {
     private Setting setting;
 
     @Data
+    @AllArgsConstructor
     public static class Setting {
         // 系统扮演角色，即预设
         private String rolePlay;

@@ -33,7 +33,7 @@ public class ChatController {
     
     /**
      * 测试
-     * @param chat
+     * @param chatRequest
      * @return
      */
     @PostMapping("/prompt")

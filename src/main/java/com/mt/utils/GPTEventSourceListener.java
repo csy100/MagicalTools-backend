@@ -90,7 +90,7 @@ public class GPTEventSourceListener extends EventSourceListener {
 //            errorMsg = String.valueOf(response);
 //        }
         
-        sseEmitter.send("\n\n\n ### [接收消息处理异常，响应中断，本次回答不扣费]");
+        sseEmitter.send("\n\n ### [接收消息处理异常，响应中断，本次回答不扣费]");
         eventSource.cancel();
         SseHelper.complete(sseEmitter);
     }

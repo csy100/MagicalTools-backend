@@ -1,10 +1,5 @@
 package com.mt.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,8 +15,6 @@ import com.mt.utils.UserHolder;
 import com.plexpt.chatgpt.ChatGPTStream;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.Message;
-import com.plexpt.chatgpt.listener.SseStreamListener;
-import com.plexpt.chatgpt.util.Proxys;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,10 +24,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.net.Proxy;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static com.mt.utils.RedisConstants.CHAT_USER_KEY;
-import static com.mt.utils.RedisConstants.CHAT_USER_TTL;
 
 /**
  * Author: csy100
@@ -99,12 +88,12 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         Chat chat = chatRequest.getChat();
         ChatRequest.Setting setting = chatRequest.getSetting();
         //国内需要代理 国外不需要
-        Proxy proxy = Proxys.http("127.0.0.1", 7890);
+//        Proxy proxy = Proxys.http("127.0.0.1", 7890);
         
         ChatGPTStream chatGPTStream = ChatGPTStream.builder()
                 .timeout(600)
                 .apiKey("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")
-                .proxy(proxy)
+//                .proxy(proxy)
                 .apiHost("https://api.openai.com/")
                 .build()
                 .init();
@@ -112,10 +101,12 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         SseEmitter sseEmitter = new SseEmitter(-1L);
         
         GPTEventSourceListener listener = new GPTEventSourceListener(sseEmitter);
+        
         if (setting == null) {
             setting = new ChatRequest.Setting("", "gpt-3.5-turbo",
                             0.0, 0, 1024, 0.0,0.0 );
         }
+        
         // 添加预设
         Message system = Message.ofSystem(setting.getRolePlay());
         // 添加系统消息
@@ -132,13 +123,13 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
         });
         chatCompletion = ChatCompletion.builder()
                 .messages(AllMessage)
-                .model("gpt-3.5-turbo")
+                .model(setting.getModel())
                 .temperature(setting.getTemperature()) // 对话温度 使用什么取样温度，0到2之间。越高越奔放。越低越保守
                 .frequencyPenalty(setting.getFrequencyPenalty()) // 控制字符的重复度
                 .presencePenalty(setting.getPresencePenalty()) // 控制主题的重复度
                 .user(String.valueOf(userId)) // 用户唯一标识
                 .build();
-
+        
         chatGPTStream.streamChatCompletion(chatCompletion, listener);
         return sseEmitter;
     }
@@ -165,7 +156,6 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat> implements Ch
             allMessage.add(tempUserMessage);
             allMessage.add(tempGptMessage);
         }
-        return ;
     }
 
     private void saveChat(Long userId, Chat chat, String msg) {

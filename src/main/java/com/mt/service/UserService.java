@@ -2,8 +2,10 @@ package com.mt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mt.common.Result;
+import com.mt.controller.UserOrderController;
 import com.mt.dto.LoginFormDto;
 import com.mt.entity.User;
+import com.mt.entity.UserOrder;
 
 /**
  * Author: csy100
@@ -17,4 +19,8 @@ public interface UserService extends IService<User> {
     Result userLogout(String token);
     
     Result changePassword(LoginFormDto loginFormDto);
+
+    Result getCode(String price);
+
+    void getResByXorPay(UserOrderController.PayRequest request);
 }

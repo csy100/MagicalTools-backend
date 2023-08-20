@@ -90,3 +90,17 @@ VALUES (1010, '1010', 0, '用户发言1'),
        (1010, '1010', 1, 'GPT回答1'),
        (1010, '1010', 0, '用户发言2'),
        (1010, '1010', 1, 'GPT回答2');
+
+
+
+
+create table tb_order
+(
+    id    bigint unsigned auto_increment
+        primary key,
+    price double     default 0 null,
+    token bigint(35) default 0 null,
+    email varchar(100)         null,
+    constraint table_name_id_uindex
+        unique (id)
+);

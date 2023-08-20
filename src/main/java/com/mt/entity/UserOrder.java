@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Date: 2023/8/19
  */
 @Data
-@TableName("tb_user_order")
+@TableName("tb_order")
 public class UserOrder implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -23,5 +23,9 @@ public class UserOrder implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     
-    private Long price;
+    private Double price;
+
+    private Long token;
+
+    private String email;
 }

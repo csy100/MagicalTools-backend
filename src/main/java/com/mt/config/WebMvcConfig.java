@@ -30,7 +30,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/user/code",
                         "/user/login",
-                        "/user/password"
+                        "/user/password",
+                        "/order/getPayRes"
                 );
         
     }
@@ -41,8 +42,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-//                        .allowedOrigins("http://38.47.121.199:8000")
-                        .allowedOrigins("http://127.0.0.1:8000")
+                        .allowedOrigins("http://38.47.121.199:8000")
+//                        .allowedOrigins("http://127.0.0.1:8000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowCredentials(true)
                         .maxAge(3600);

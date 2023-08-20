@@ -177,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 拿到此时的用户数据
         System.out.println(UserHolder.getUser().getEmail());
-        User user = this.query().eq("id", UserHolder.getUser().getEmail()).one();
+        User user = this.query().eq("email", UserHolder.getUser().getEmail()).one();
         String mail = user.getEmail();
         // 设置请求参数
         String name = "4gai";
@@ -219,12 +219,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        order.setCreateTime(new Date());
         try {
             String res = responseMono.block();
+            System.out.println(res);
             JSONObject jsonObject = JSONUtil.parseObj(res);
             String aoid = jsonObject.getStr("aoid");
 //            order.setAoid(aoid);
 //            this.save(order);
             String qr = jsonObject.getJSONObject("info").getStr("qr");
             log.info(aoid);
+            log.info(qr);
             return Result.ok(qr);
         } catch (Exception error) {
             return Result.fail(error.getMessage());

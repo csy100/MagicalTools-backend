@@ -97,7 +97,7 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
         System.out.println("detail = " + detail);
         System.out.println("sign = " + sign);
         double payPrice = Double.parseDouble(pay_price); // 实际支付的rmb
-        Long addTimes = (long) (payPrice + 0.5) * 35000; // 支付后新增的金币数量
+        Long addTimes = (long) payPrice * 35000; // 支付后新增的金币数量
 
         String[] split = order_id.split("=");
         String mail = split[0];
@@ -106,7 +106,7 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
         UserOrder userOrder = this.getOne(queryWrapper);
         if (userOrder == null) {
             UserOrder userOrderTemp = new UserOrder();
-            userOrderTemp.setEmail(UserHolder.getUser().getEmail());
+            userOrderTemp.setEmail(mail);
             userOrderTemp.setPrice(0.0);
             userOrderTemp.setToken(0L);
             this.save(userOrderTemp);
